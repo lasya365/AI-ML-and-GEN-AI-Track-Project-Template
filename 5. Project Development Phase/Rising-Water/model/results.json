@@ -1,0 +1,81 @@
+{
+  "best_model": "Decision Tree",
+  "features": [
+    "Temp",
+    "Humidity",
+    "Cloud Cover",
+    "ANNUAL",
+    "Jan-Feb",
+    "Mar-May",
+    "Jun-Sep",
+    "Oct-Dec",
+    "avgjune",
+    "sub"
+  ],
+  "all_results": {
+    "Decision Tree": {
+      "accuracy": 95.65,
+      "precision": 100.0,
+      "recall": 66.67,
+      "f1_score": 80.0,
+      "confusion_matrix": [
+        [
+          20,
+          0
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    "Random Forest": {
+      "accuracy": 95.65,
+      "precision": 100.0,
+      "recall": 66.67,
+      "f1_score": 80.0,
+      "confusion_matrix": [
+        [
+          20,
+          0
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    "KNN": {
+      "accuracy": 86.96,
+      "precision": 50.0,
+      "recall": 33.33,
+      "f1_score": 40.0,
+      "confusion_matrix": [
+        [
+          19,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    "XGBoost": {
+      "accuracy": 86.96,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "confusion_matrix": [
+        [
+          20,
+          0
+        ],
+        [
+          3,
+          0
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2 style="margin-top:0;">Flood Risk Predictor</h2>
+  <p style="color:#5a6b76;">
+    Enter current meteorological readings to estimate flood probability.
+    Powered by the <strong>{{ meta.best_model }}</strong> model
+    ({{ meta.all_results[meta.best_model].accuracy }}% test accuracy,
+    {{ meta.all_results[meta.best_model].f1_score }}% F1 score).
+  </p>
+
+  {% if error %}
+    <div style="background:#fdecea;color:#a33;padding:12px 16px;border-radius:8px;margin-bottom:18px;">
+      Error: {{ error }}
+    </div>
+  {% endif %}
+
+  <form method="POST" action="/predict">
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;">
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Temperature (&deg;C)</label>
+        <input type="number" step="any" name="Temp" required
+          value="{{ form.Temp if form else 30 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Humidity (%)</label>
+        <input type="number" step="any" name="Humidity" required
+          value="{{ form.Humidity if form else 75 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Cloud Cover (%)</label>
+        <input type="number" step="any" name="Cloud Cover" required
+          value="{{ form['Cloud Cover'] if form else 38 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Annual Rainfall (mm)</label>
+        <input type="number" step="any" name="ANNUAL" required
+          value="{{ form.ANNUAL if form else 3000 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Jan&ndash;Feb Rainfall (mm)</label>
+        <input type="number" step="any" name="Jan-Feb" required
+          value="{{ form['Jan-Feb'] if form else 20 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Mar&ndash;May Rainfall (mm)</label>
+        <input type="number" step="any" name="Mar-May" required
+          value="{{ form['Mar-May'] if form else 150 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Jun&ndash;Sep Rainfall (mm)</label>
+        <input type="number" step="any" name="Jun-Sep" required
+          value="{{ form['Jun-Sep'] if form else 2200 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Oct&ndash;Dec Rainfall (mm)</label>
+        <input type="number" step="any" name="Oct-Dec" required
+          value="{{ form['Oct-Dec'] if form else 500 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Average June Rainfall (mm)</label>
+        <input type="number" step="any" name="avgjune" required
+          value="{{ form.avgjune if form else 220 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+      <div>
+        <label style="font-size:.85rem;color:#4a5a64;">Sub-region Rainfall (mm)</label>
+        <input type="number" step="any" name="sub" required
+          value="{{ form.sub if form else 440 }}"
+          style="width:100%;padding:10px;border:1px solid #cdd9e0;border-radius:8px;margin-top:4px;">
+      </div>
+
+    </div>
+
+    <button type="submit"
+      style="margin-top:24px;background:var(--mid);color:#fff;border:none;padding:13px 28px;
+             border-radius:8px;font-size:1rem;cursor:pointer;">
+      Predict Flood Risk
+    </button>
+  </form>
+</div>
+
+{% if result %}
+<div class="card" style="border-left:6px solid {{ '#d9534f' if result.prediction == 1 else '#2e8b57' }};">
+  <h2 style="margin-top:0;">
+    {% if result.prediction == 1 %}⚠️ Flood Risk Detected{% else %}✅ Low Flood Risk{% endif %}
+  </h2>
+  <p style="font-size:1.1rem;">
+    Predicted flood probability: <strong>{{ result.flood_probability }}%</strong>
+    &nbsp;|&nbsp; Risk level: <strong>{{ result.risk_level }}</strong>
+  </p>
+  <p style="color:#5a6b76;font-size:.9rem;">Model used: {{ result.model_used }}</p>
+  {% if result.prediction == 1 %}
+  <p style="color:#a33;">Recommended action: issue an early-warning advisory and prioritise resource deployment to this district.</p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

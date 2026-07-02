@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2 style="margin-top:0;">Model Validation &amp; Performance Assessment</h2>
+  <p style="color:#5a6b76;">
+    Each model was trained on an 80/20 train-test split of historical weather data and evaluated
+    on held-out test data. The best performer (<strong>{{ meta.best_model }}</strong>) was saved
+    and integrated into the prediction app.
+  </p>
+
+  <table style="width:100%;border-collapse:collapse;margin-top:18px;">
+    <thead>
+      <tr style="background:#eef5fa;text-align:left;">
+        <th style="padding:10px;">Model</th>
+        <th style="padding:10px;">Accuracy</th>
+        <th style="padding:10px;">Precision</th>
+        <th style="padding:10px;">Recall</th>
+        <th style="padding:10px;">F1 Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for name, m in meta.all_results.items() %}
+      <tr style="border-bottom:1px solid #e3ebf0;{% if name == meta.best_model %}background:#f0f9f4;font-weight:600;{% endif %}">
+        <td style="padding:10px;">{{ name }}{% if name == meta.best_model %} ⭐{% endif %}</td>
+        <td style="padding:10px;">{{ m.accuracy }}%</td>
+        <td style="padding:10px;">{{ m.precision }}%</td>
+        <td style="padding:10px;">{{ m.recall }}%</td>
+        <td style="padding:10px;">{{ m.f1_score }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0;">Features Used</h3>
+  <p style="color:#5a6b76;">{{ meta.features | join(", ") }}</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0;">Deployment Notes</h3>
+  <p style="color:#5a6b76;">
+    This Flask application is designed for deployment on cloud platforms (e.g. IBM Cloud) for
+    scalable, location-independent access by disaster management teams and meteorologists.
+  </p>
+</div>
+
+{% endblock %}
