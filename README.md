@@ -231,7 +231,7 @@ Add screenshots of:
 
 - Annam Lasya
 - Guravaiah Katta
-- Annam Lasya 
+- Batta Kusumamba
 
 ---
 
